@@ -8,6 +8,10 @@ This system allows you to manage different types of menus for various times of d
 
 The system is designed using object-oriented programming principles, with classes representing the menus, franchises, and the business itself. This design makes it flexible and extensible, allowing for future expansions such as adding new menu types or franchise locations.
 
+   ## About
+
+This project was developed as part of a Python programming exercise. It showcases the application of object-oriented programming principles, such as creating classes for menu management, franchise handling, and billing calculations. The goal was to build a flexible system that could be expanded easily and used in various restaurant scenarios.
+
 ## Features
 
 - **Flexible Menu Management**  
