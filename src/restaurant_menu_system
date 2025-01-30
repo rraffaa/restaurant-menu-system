@@ -1,0 +1,109 @@
+from datetime import datetime
+
+class Menu:
+    def __init__(self, name, items, start_time, end_time):
+        self.name = name
+        self.items = items
+        self.start_time = start_time
+        self.end_time = end_time
+
+    def __str__(self):
+        return f'{self.name} menu available from {self.start_time} to {self.end_time}'
+
+    def calculate_bill(self, purchased_items):
+        total = 0
+        for item in purchased_items:
+            total += self.items.get(item, 0)
+        return total
+
+
+class Franchise:
+    def __init__(self, address, menus):
+        self.address = address
+        self.menus = menus
+
+    def __str__(self):
+        return f'{self.address}'
+
+    def available_menus(self, time):
+        available = []
+        for menu in self.menus:
+            # Adjust the comparison for menu start and end times
+            if self.is_time_in_range(time, menu.start_time, menu.end_time):
+                available.append(str(menu))
+        return available
+
+    def is_time_in_range(self, time, start_time, end_time):
+        """Compares the time in 12-hour format (AM/PM)."""
+        time = datetime.strptime(time, '%I%p')
+        start_time = datetime.strptime(start_time, '%I%p')
+        end_time = datetime.strptime(end_time, '%I%p')
+
+        # Compare times
+        return start_time <= time <= end_time
+
+
+# Dessert Menu items
+dessert_items = {
+    'tiramisu': 6.50,
+    'cannoli': 5.00,
+    'panna cotta': 7.00,
+    'gelato': 4.50,
+    'chocolate lava cake': 8.00,
+    'espresso': 2.50,
+    'coffee': 2.00
+}
+
+# Create the Dessert Menu
+dessert_menu = Menu('Dessert Delights', dessert_items, '8pm', '11pm')
+
+# Brunch, Dinner, and Kids Menus as previously defined
+brunch_items = {
+    'apple pie': 8.00,
+    'croissant': 5.50,
+    'mushroom omelet': 10.00,
+    'bread with butter': 3.00,
+    'espresso': 2.50,
+    'fresh orange juice': 4.00,
+    'peach mimosas': 12.00
+}
+
+brunch = Menu('Morning Sweetness', brunch_items, '9am', '12pm')
+
+dinner_items = {
+    'eggplant lasagna': 18.00,
+    'spinach and ricotta ravioli': 16.50,
+    'caprese salad': 14.00,
+    'carbonara spaghetti': 20.00,
+    'tiramisu': 7.00,
+    'red wine (glass)': 6.00,
+    'italian coffee': 2.50
+}
+
+dinner = Menu('Italian Evening', dinner_items, '6pm', '10pm')
+
+kids_items = {
+    'mini margherita pizza': 6.50,
+    'pasta with tomato sauce': 7.00,
+    'chicken nuggets': 5.50,
+    'strawberry juice': 4.00
+}
+
+kids_menu = Menu('Fun in the Kitchen', kids_items, '11am', '9pm')
+
+# Create the Franchises
+flagship_store = Franchise('123 Happiness Avenue', [brunch, dinner, kids_menu, dessert_menu])
+new_installment = Franchise('456 Sun Rise Street', [brunch, dinner, kids_menu, dessert_menu])
+
+# Testing available menus at specific times
+print(flagship_store.available_menus('9pm'))  # shows brunch, dinner, kids_menu, and dessert_menu
+print(new_installment.available_menus('9pm'))  # shows brunch, dinner, kids_menu, and dessert_menu
+
+# Testing specific times to see which menus are available
+print(flagship_store.available_menus('10am'))  # shows brunch only
+print(flagship_store.available_menus('7pm'))  # shows dinner and other available menus
+
+# Calculating the total bill for a dessert order
+dessert_order = ['tiramisu', 'cannoli', 'gelato']
+dessert_bill = dessert_menu.calculate_bill(dessert_order)
+print(f'Total bill for dessert: ${dessert_bill}')
